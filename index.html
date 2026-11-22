@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>徒歩10分ランチ検索</title>
+  <meta name="theme-color" content="#8c6d53" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <style>
+    :root {
+      --bg: #f6f5f2;
+      --surface: #ffffff;
+      --text: #2c2a29;
+      --muted: #6e6a66;
+      --border: #e5e1da;
+      --accent: #8c6d53;
+      --accent-dark: #6f543e;
+      --card-ok-bg: #e7f3ec;
+      --card-ok-text: #1f6b43;
+      --cash-only-bg: #fdeee9;
+      --cash-only-text: #b84225;
+      --memo-bg: #faf6eb;
+      --memo-border: #eadcb8;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 32px;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .add-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .add-btn:active { background: var(--accent-dark); }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .field {
+      flex: 1;
+      min-width: 140px;
+    }
+    .field label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    .field input[type="text"],
+    .field input[type="time"],
+    .field input[type="number"],
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .time-wrap { display: flex; gap: 6px; }
+    .now-btn {
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .chip {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .chip.active {
+      background: var(--text);
+      color: #fff;
+      border-color: var(--text);
+    }
+
+    .summary-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 8px 2px 12px;
+      font-size: 0.84rem;
+      color: var(--muted);
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .reset-link {
+      background: none;
+      border: none;
+      color: var(--muted);
+      text-decoration: underline;
+      font-size: 0.78rem;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+
+    .shop-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .shop-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px;
+    }
+    .shop-card.has-memo { border-left: 4px solid var(--accent); }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .shop-name {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .sources {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .source-tag {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .src-google { background: #e8f0fe; color: #1967d2; }
+    .src-hotpepper { background: #fce8e6; color: #c5221f; }
+    .src-custom { background: #efeae2; color: #6f543e; }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .pay-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .pay-card { background: var(--card-ok-bg); color: var(--card-ok-text); }
+    .pay-cash { background: var(--cash-only-bg); color: var(--cash-only-text); }
+    .pay-unknown { background: #eee; color: #555; }
+
+    .genre-badge {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+    .budget-badge { font-weight: 700; font-size: 0.85rem; }
+
+    .memo-box {
+      background: var(--memo-bg);
+      border: 1px solid var(--memo-border);
+      border-radius: 8px;
+      padding: 9px 11px;
+      font-size: 0.86rem;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+    .memo-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-top: 1px solid #f0ede7;
+      padding-top: 10px;
+    }
+    .btn-sub {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px 16px;
+      color: var(--muted);
+      background: var(--surface);
+      border-radius: 14px;
+      border: 1px dashed var(--border);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      width: 100%;
+      max-width: 460px;
+      border-radius: 16px;
+      padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal h2 { margin: 0 0 14px; font-size: 1.05rem; }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1>徒歩10分ランチ検索</h1>
+    <button class="add-btn" id="openAddModalBtn">＋ お店を登録</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <div class="row">
+      <div class="field" style="flex: 1.4;">
+        <label for="locationInput">場所（徒歩10分 / 800m圏内）</label>
+        <input type="text" id="locationInput" value="指定エリア周辺" placeholder="例：〇〇駅、職場周辺など" />
+      </div>
+      <div class="field">
+        <label for="timeInput">食べる時間</label>
+        <div class="time-wrap">
+          <input type="time" id="timeInput" value="12:00" />
+          <button type="button" class="now-btn" id="setNowBtn">今</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>ジャンル</label>
+        <div class="chips" id="genreChips">
+          <button class="chip active" data-value="すべて">すべて</button>
+          <button class="chip" data-value="和食">和食</button>
+          <button class="chip" data-value="洋食">洋食</button>
+          <button class="chip" data-value="お弁当">お弁当</button>
+          <button class="chip" data-value="定食">定食</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 0;">
+      <div class="field">
+        <label for="budgetSelect">予算上限</label>
+        <select id="budgetSelect">
+          <option value="1500" selected>1,500円以内</option>
+          <option value="1200">1,200円以内</option>
+          <option value="1000">1,000円以内</option>
+          <option value="9999">上限なし</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="paymentSelect">支払い方法</label>
+        <select id="paymentSelect">
+          <option value="all">すべて</option>
+          <option value="card">💳 カード可のみ</option>
+          <option value="cash">💴 現金のみ</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <div class="summary-bar">
+    <span id="resultCount">0件のお店が見つかりました</span>
+    <div>
+      <button class="reset-link" id="exportBtn" style="margin-right: 10px;">バックアップ保存</button>
+      <button class="reset-link" id="resetDataBtn">初期化</button>
+    </div>
+  </div>
+
+  <section class="shop-list" id="shopList"></section>
+</main>
+
+<!-- メモ・支払い編集モーダル -->
+<div class="modal-backdrop" id="editModal">
+  <div class="modal">
+    <h2 id="editModalTitle">メモ・支払い情報を編集</h2>
+    <input type="hidden" id="editShopId" />
+    <div class="field" style="margin-bottom: 12px;">
+      <label for="editPayment">実際の支払い方法</label>
+      <select id="editPayment">
+        <option value="card">💳 カード可</option>
+        <option value="cash">💴 現金のみ</option>
+        <option value="unknown">❓ 未確認</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="editMemo">一言メモ</label>
+      <textarea id="editMemo" rows="4" placeholder="例：ランチは現金のみだった／12:30頃には日替わり売り切れ"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-sub" id="closeEditModalBtn">キャンセル</button>
+      <button type="button" class="btn-primary" id="saveEditBtn">保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- 新規お店登録モーダル -->
+<div class="modal-backdrop" id="addModal">
+  <div class="modal">
+    <h2>自分のお店を登録</h2>
+    <div class="field" style="margin-bottom: 10px;">
+      <label for="newName">お店の名前 *</label>
+      <input type="text" id="newName" placeholder="例：〇〇弁当、街の定食屋" />
+    </div>
+    <div class="row" style="margin-bottom: 10px;">
+      <div class="field">
+        <label for="newGenre">ジャンル</label>
+        <select id="newGenre">
+          <option value="定食">定食</option>
+          <option value="お弁当">お弁当</option>
+          <option value="和食">和食</option>
+          <option value="洋食">洋食</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="newBudget">予算目安（円）</label>
+        <input type="number" id="newBudget" value="1000" step="50" />
+      </div>
+    </div>
+    <div class="row" style="margin-bottom: 10px;">
+      <div class="field">
+        <label for="newWalk">徒歩（分）</label>
+        <input type="number" id="newWalk" value="5" min="1" max="10" />
+      </div>
+      <div class="field">
+        <label for="newPayment">支払い方法</label>
+        <select id="newPayment">
+          <option value="card">💳 カード可</option>
+          <option value="cash">💴 現金のみ</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" style="margin-bottom: 10px;">
+      <div class="field">
+        <label for="newOpen">ランチ開始</label>
+        <input type="time" id="newOpen" value="11:30" />
+      </div>
+      <div class="field">
+        <label for="newClose">ランチ終了</label>
+        <input type="time" id="newClose" value="14:00" />
+      </div>
+    </div>
+    <div class="field">
+      <label for="newMemo">一言メモ</label>
+      <textarea id="newMemo" rows="3" placeholder="例：焼き魚定食が美味しい、カウンター席あり"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-sub" id="closeAddModalBtn">キャンセル</button>
+      <button type="button" class="btn-primary" id="saveAddBtn">登録する</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Service Worker 登録（PWA化）
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    });
+  }
+
+  const STORAGE_KEY = "lunch_pwa_shops_v1";
+  const DEFAULT_SHOPS = [
+    {
+      id: "s1",
+      name: "ごはん処 みのり屋",
+      genre: "定食",
+      budget: 980,
+      walkMin: 4,
+      open: "11:00",
+      close: "14:30",
+      payment: "cash",
+      sources: ["google"],
+      rating: 4.3,
+      memo: "焼き魚定食が美味しい。12時台は混むので11:30前が狙い目。"
+    },
+    {
+      id: "s2",
+      name: "ビストロ・ソレイユ",
+      genre: "洋食",
+      budget: 1350,
+      walkMin: 6,
+      open: "11:30",
+      close: "15:00",
+      payment: "card",
+      sources: ["google", "hotpepper"],
+      rating: 4.1,
+      memo: ""
+    },
+    {
+      id: "s3",
+      name: "手作りおべんとう こもれび",
+      genre: "お弁当",
+      budget: 750,
+      walkMin: 3,
+      open: "10:30",
+      close: "13:30",
+      payment: "cash",
+      sources: ["google"],
+      rating: 4.5,
+      memo: "13時すぎると日替わり弁当はだいたい売り切れ。現金のみ。"
+    },
+    {
+      id: "s4",
+      name: "季節和食 かえで",
+      genre: "和食",
+      budget: 1480,
+      walkMin: 8,
+      open: "11:30",
+      close: "14:00",
+      payment: "card",
+      sources: ["hotpepper"],
+      rating: 4.2,
+      memo: "少し贅沢したい日に。席が広くて落ち着く。"
+    }
+  ];
+
+  let shops = loadShops();
+  let selectedGenre = "すべて";
+
+  function loadShops() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return structuredClone(DEFAULT_SHOPS);
+  }
+
+  function saveShops() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(shops));
+  }
+
+  function toMinutes(timeStr) {
+    const [h, m] = timeStr.split(":").map(Number);
+    return h * 60 + m;
+  }
+
+  function isOpenAt(shop, targetTime) {
+    if (!targetTime) return true;
+    const t = toMinutes(targetTime);
+    return t >= toMinutes(shop.open) && t <= toMinutes(shop.close);
+  }
+
+  function renderPaymentBadge(payment) {
+    if (payment === "card") return `<span class="pay-badge pay-card">💳 カード可</span>`;
+    if (payment === "cash") return `<span class="pay-badge pay-cash">💴 現金のみ</span>`;
+    return `<span class="pay-badge pay-unknown">❓ 支払い未確認</span>`;
+  }
+
+  function renderSources(sources) {
+    return sources.map(src => {
+      if (src === "google") return `<span class="source-tag src-google">Googleマップ</span>`;
+      if (src === "hotpepper") return `<span class="source-tag src-hotpepper">ホットペッパー</span>`;
+      return `<span class="source-tag src-custom">マイ登録</span>`;
+    }).join("");
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function render() {
+    const targetTime = document.getElementById("timeInput").value;
+    const maxBudget = Number(document.getElementById("budgetSelect").value);
+    const paymentFilter = document.getElementById("paymentSelect").value;
+    const locationName = document.getElementById("locationInput").value.trim() || "指定場所";
+
+    const filtered = shops
+      .filter(s => s.walkMin <= 10)
+      .filter(s => selectedGenre === "すべて" || s.genre === selectedGenre)
+      .filter(s => s.budget <= maxBudget)
+      .filter(s => paymentFilter === "all" || s.payment === paymentFilter)
+      .filter(s => isOpenAt(s, targetTime))
+      .sort((a, b) => {
+        const aMemo = a.memo ? 1 : 0;
+        const bMemo = b.memo ? 1 : 0;
+        if (bMemo !== aMemo) return bMemo - aMemo;
+        return a.walkMin - b.walkMin;
+      });
+
+    document.getElementById("resultCount").textContent =
+      `${locationName}から徒歩10分・${targetTime}営業中：${filtered.length}件`;
+
+    const listEl = document.getElementById("shopList");
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<div class="empty">条件に合うお店が見つかりませんでした。</div>`;
+      return;
+    }
+
+    listEl.innerHTML = filtered.map(shop => {
+      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(shop.name + " ランチ")}`;
+      return `
+        <article class="shop-card ${shop.memo ? "has-memo" : ""}">
+          <div class="card-top">
+            <h3 class="shop-name">${escapeHtml(shop.name)}</h3>
+            <div class="sources">${renderSources(shop.sources)}</div>
+          </div>
+          <div class="meta-row">
+            <span>🚶 徒歩${shop.walkMin}分</span>
+            <span>🕒 ${shop.open}〜${shop.close}</span>
+            ${shop.rating ? `<span>★ ${shop.rating.toFixed(1)}</span>` : ""}
+          </div>
+          <div class="badges">
+            ${renderPaymentBadge(shop.payment)}
+            <span class="genre-badge">${escapeHtml(shop.genre)}</span>
+            <span class="budget-badge">目安 〜${shop.budget.toLocaleString()}円</span>
+          </div>
+          ${shop.memo ? `
+            <div class="memo-box">
+              <span class="memo-label">📝 マイメモ</span>
+              ${escapeHtml(shop.memo)}
+            </div>
+          ` : ""}
+          <div class="card-actions">
+            <button class="btn-sub" onclick="openEditModal('${shop.id}')">✏️ メモ・支払いを編集</button>
+            <a class="btn-sub" href="${searchUrl}" target="_blank" rel="noopener">🔍 口コミを見る</a>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  document.getElementById("genreChips").addEventListener("click", (e) => {
+    if (!e.target.classList.contains("chip")) return;
+    document.querySelectorAll("#genreChips .chip").forEach(c => c.classList.remove("active"));
+    e.target.classList.add("active");
+    selectedGenre = e.target.dataset.value;
+    render();
+  });
+
+  ["locationInput", "timeInput", "budgetSelect", "paymentSelect"].forEach(id => {
+    document.getElementById(id).addEventListener("input", render);
+    document.getElementById(id).addEventListener("change", render);
+  });
+
+  document.getElementById("setNowBtn").addEventListener("click", () => {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    document.getElementById("timeInput").value = `${hh}:${mm}`;
+    render();
+  });
+
+  const editModal = document.getElementById("editModal");
+  window.openEditModal = function(shopId) {
+    const shop = shops.find(s => s.id === shopId);
+    if (!shop) return;
+    document.getElementById("editShopId").value = shop.id;
+    document.getElementById("editModalTitle").textContent = `${shop.name} の編集`;
+    document.getElementById("editPayment").value = shop.payment;
+    document.getElementById("editMemo").value = shop.memo || "";
+    editModal.classList.add("open");
+  };
+  document.getElementById("closeEditModalBtn").addEventListener("click", () => editModal.classList.remove("open"));
+  document.getElementById("saveEditBtn").addEventListener("click", () => {
+    const shop = shops.find(s => s.id === document.getElementById("editShopId").value);
+    if (shop) {
+      shop.payment = document.getElementById("editPayment").value;
+      shop.memo = document.getElementById("editMemo").value.trim();
+      saveShops();
+      render();
+    }
+    editModal.classList.remove("open");
+  });
+
+  const addModal = document.getElementById("addModal");
+  document.getElementById("openAddModalBtn").addEventListener("click", () => addModal.classList.add("open"));
+  document.getElementById("closeAddModalBtn").addEventListener("click", () => addModal.classList.remove("open"));
+  document.getElementById("saveAddBtn").addEventListener("click", () => {
+    const name = document.getElementById("newName").value.trim();
+    if (!name) return alert("お店の名前を入力してください。");
+    shops.unshift({
+      id: "custom_" + Date.now(),
+      name,
+      genre: document.getElementById("newGenre").value,
+      budget: Number(document.getElementById("newBudget").value) || 1000,
+      walkMin: Number(document.getElementById("newWalk").value) || 5,
+      open: document.getElementById("newOpen").value || "11:30",
+      close: document.getElementById("newClose").value || "14:00",
+      payment: document.getElementById("newPayment").value,
+      sources: ["custom"],
+      rating: null,
+      memo: document.getElementById("newMemo").value.trim()
+    });
+    saveShops();
+    render();
+    document.getElementById("newName").value = "";
+    document.getElementById("newMemo").value = "";
+    addModal.classList.remove("open");
+  });
+
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(shops, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "lunch_memo_backup.json";
+    a.click();
+  });
+
+  document.getElementById("resetDataBtn").addEventListener("click", () => {
+    if (confirm("編集したメモや追加したお店を初期状態に戻しますか？")) {
+      localStorage.removeItem(STORAGE_KEY);
+      shops = structuredClone(DEFAULT_SHOPS);
+      render();
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>
