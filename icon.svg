@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="110" fill="#8c6d53"/>
-  <circle cx="256" cy="256" r="145" fill="#f6f5f2"/>
-  <circle cx="256" cy="256" r="105" fill="none" stroke="#8c6d53" stroke-width="14"/>
-  <text x="256" y="292" text-anchor="middle" font-size="110" font-family="sans-serif" fill="#8c6d53" font-weight="bold">食</text>
+  <rect width="512" height="512" rx="110" fill="#f2ece1"/>
+  <rect x="34" y="34" width="444" height="444" rx="84" fill="none" stroke="#8c6d53" stroke-width="8"/>
+  <text x="256" y="228" text-anchor="middle" font-size="82" font-family="sans-serif" fill="#4a3c31" font-weight="700" letter-spacing="2">10min</text>
+  <line x1="136" y1="266" x2="376" y2="266" stroke="#8c6d53" stroke-width="6" stroke-linecap="round"/>
+  <text x="256" y="338" text-anchor="middle" font-size="54" font-family="sans-serif" fill="#8c6d53" font-weight="700" letter-spacing="10">LUNCH</text>
 </svg>
