@@ -72,7 +72,7 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 16px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -100,16 +100,22 @@
       font-family: inherit;
     }
 
-    .time-wrap { display: flex; gap: 6px; }
-    .now-btn {
+    .inline-wrap { display: flex; gap: 6px; }
+    .sub-pill-btn {
       white-space: nowrap;
       border: 1px solid var(--border);
       background: var(--bg);
       color: var(--text);
       border-radius: 8px;
-      padding: 0 12px;
-      font-size: 0.85rem;
+      padding: 0 11px;
+      font-size: 0.84rem;
       cursor: pointer;
+    }
+    .sub-pill-btn.gps-active {
+      background: #e8f0fe;
+      border-color: #90b8f8;
+      color: #1967d2;
+      font-weight: 600;
     }
 
     .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
@@ -124,6 +130,52 @@
     }
     .chip.active { background: var(--text); color: #fff; border-color: var(--text); }
     .chip.fav-active { background: #fdf3dc; color: #9c6b08; border-color: #e8c468; font-weight: 700; }
+
+    /* 一発検索エリア */
+    .web-search-box {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
+    }
+    .web-search-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .web-search-preview {
+      font-size: 0.74rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .web-search-btns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .web-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      text-align: center;
+      border: 1px solid transparent;
+    }
+    .web-btn-google { background: #e8f0fe; color: #1967d2; border-color: #c6dafc; }
+    .web-btn-hp { background: #fce8e6; color: #c5221f; border-color: #f6c8c3; }
+    .web-btn-tabelog { background: #fff3e0; color: #c76200; border-color: #fbd9a7; }
+    .web-btn span.sub { font-size: 0.68rem; font-weight: 500; opacity: 0.85; }
 
     .summary-bar {
       display: flex;
@@ -162,7 +214,6 @@
       gap: 8px;
       margin-bottom: 6px;
     }
-    .title-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .shop-name { margin: 0; font-size: 1.08rem; font-weight: 700; }
 
     .fav-btn {
@@ -265,7 +316,6 @@
       border-radius: 6px;
       text-decoration: none;
       font-weight: 600;
-      border: 1px solid transparent;
     }
     .src-google { background: #e8f0fe; color: #1967d2; }
     .src-hotpepper { background: #fce8e6; color: #c5221f; }
@@ -291,11 +341,12 @@
 
     .empty {
       text-align: center;
-      padding: 40px 16px;
+      padding: 32px 16px;
       color: var(--muted);
       background: var(--surface);
       border-radius: 14px;
       border: 1px dashed var(--border);
+      font-size: 0.88rem;
     }
 
     .modal-backdrop {
@@ -362,15 +413,18 @@
 <main>
   <section class="panel">
     <div class="row">
-      <div class="field" style="flex: 1.4;">
-        <label for="locationInput">場所（徒歩10分 / 800m圏内）</label>
-        <input type="text" id="locationInput" value="指定エリア周辺" placeholder="例：〇〇駅、職場周辺など" />
+      <div class="field" style="flex: 1.5;">
+        <label for="locationInput">場所（駅名・地名・住所など）</label>
+        <div class="inline-wrap">
+          <input type="text" id="locationInput" placeholder="例：天神駅、百道、博多駅など" />
+          <button type="button" class="sub-pill-btn" id="gpsBtn">📍 現在地</button>
+        </div>
       </div>
       <div class="field">
         <label for="timeInput">食べる時間</label>
-        <div class="time-wrap">
+        <div class="inline-wrap">
           <input type="time" id="timeInput" value="12:00" />
-          <button type="button" class="now-btn" id="setNowBtn">今</button>
+          <button type="button" class="sub-pill-btn" id="setNowBtn">今</button>
         </div>
       </div>
     </div>
@@ -409,10 +463,32 @@
         </select>
       </div>
     </div>
+
+    <!-- 条件付き一発ネット検索 -->
+    <div class="web-search-box">
+      <div class="web-search-title">
+        <span>🔍 この条件で本物のお店を検索</span>
+        <span class="web-search-preview" id="searchQueryPreview"></span>
+      </div>
+      <div class="web-search-btns">
+        <a class="web-btn web-btn-google" id="webGoogleLink" href="#" target="_blank" rel="noopener">
+          <span>🗺️ Googleマップ</span>
+          <span class="sub">周辺を地図で探す</span>
+        </a>
+        <a class="web-btn web-btn-hp" id="webHpLink" href="#" target="_blank" rel="noopener">
+          <span>🍽️ ホットペッパー</span>
+          <span class="sub">ランチ・カード情報</span>
+        </a>
+        <a class="web-btn web-btn-tabelog" id="webTabelogLink" href="#" target="_blank" rel="noopener">
+          <span>⭐ 食べログ</span>
+          <span class="sub">メニュー・写真を見る</span>
+        </a>
+      </div>
+    </div>
   </section>
 
   <div class="summary-bar">
-    <span id="resultCount">0件のお店が見つかりました</span>
+    <span id="resultCount">マイリスト：0件</span>
     <div>
       <button class="reset-link" id="exportBtn" style="margin-right: 10px;">バックアップ保存</button>
       <button class="reset-link" id="resetDataBtn">初期化</button>
@@ -555,7 +631,7 @@
   const DEFAULT_SHOPS = [
     {
       id: "s1",
-      name: "ごはん処 みのり屋",
+      name: "ごはん処 みのり屋（サンプル）",
       genre: "定食",
       budget: 980,
       walkMin: 4,
@@ -565,13 +641,13 @@
       favorite: true,
       menu: "・塩サバ定食 980円\n・チキン南蛮定食 950円\n・日替わり定食 880円",
       photo: "",
-      memo: "塩サバが絶品。12時台は混むので11:30前が狙い目。",
+      memo: "ネット検索でいいお店を見つけたら、右上の「＋ お店を登録」からここにストックできます。",
       googleUrl: "",
       sourceUrl: ""
     },
     {
       id: "s2",
-      name: "ビストロ・ソレイユ",
+      name: "ビストロ・ソレイユ（サンプル）",
       genre: "洋食",
       budget: 1350,
       walkMin: 6,
@@ -584,38 +660,6 @@
       memo: "",
       googleUrl: "",
       sourceUrl: ""
-    },
-    {
-      id: "s3",
-      name: "手作りおべんとう こもれび",
-      genre: "お弁当",
-      budget: 750,
-      walkMin: 3,
-      open: "10:30",
-      close: "13:30",
-      payment: "cash",
-      favorite: false,
-      menu: "・日替わり幕の内 700円\n・のり明太弁当 650円",
-      photo: "",
-      memo: "13時すぎると日替わり弁当はだいたい売り切れ。現金のみ。",
-      googleUrl: "",
-      sourceUrl: ""
-    },
-    {
-      id: "s4",
-      name: "季節和食 かえで",
-      genre: "和食",
-      budget: 1480,
-      walkMin: 8,
-      open: "11:30",
-      close: "14:00",
-      payment: "card",
-      favorite: true,
-      menu: "・季節の焼き魚御膳 1,480円\n・天ぷら御膳 1,450円",
-      photo: "",
-      memo: "少し贅沢したい日に。席が広くて落ち着く。",
-      googleUrl: "",
-      sourceUrl: ""
     }
   ];
 
@@ -624,6 +668,7 @@
   let onlyFavorites = false;
   let tempEditPhoto = "";
   let tempNewPhoto = "";
+  let gpsCoords = null; // { lat, lng }
 
   function loadShops() {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -641,7 +686,6 @@
     }
   }
 
-  // 写真をスマホ用に軽く圧縮（横幅最大600px）
   function compressImage(file, callback) {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -698,11 +742,48 @@
       .replace(/"/g, "&quot;");
   }
 
+  // 一発ネット検索ボタンのURLを最新条件に更新
+  function updateWebSearchLinks() {
+    const loc = document.getElementById("locationInput").value.trim();
+    const budget = Number(document.getElementById("budgetSelect").value);
+    const pay = document.getElementById("paymentSelect").value;
+
+    const genreWord = selectedGenre === "すべて" ? "ランチ" : `${selectedGenre} ランチ`;
+    const budgetWord = budget < 9999 ? `${budget}円以内` : "";
+    const payWord = pay === "card" ? "カード可" : pay === "paypay" ? "PayPay" : "";
+
+    const parts = [loc || (gpsCoords ? "" : "現在地"), genreWord, budgetWord, payWord].filter(Boolean);
+    const queryText = parts.join(" ");
+
+    document.getElementById("searchQueryPreview").textContent =
+      gpsCoords && !loc ? `現在地周辺 / ${[genreWord, budgetWord, payWord].filter(Boolean).join(" ")}` : queryText;
+
+    // Googleマップ（GPS取得済みかつ場所欄が空なら、現在地中心・徒歩10分圏のズーム15zで開く）
+    if (gpsCoords && !loc) {
+      const mapQ = encodeURIComponent([genreWord, budgetWord, payWord].filter(Boolean).join(" "));
+      document.getElementById("webGoogleLink").href =
+        `https://www.google.com/maps/search/${mapQ}/@${gpsCoords.lat},${gpsCoords.lng},15z`;
+    } else {
+      const mapParts = [loc || "現在地", genreWord, budgetWord, payWord].filter(Boolean).join(" ");
+      document.getElementById("webGoogleLink").href =
+        `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapParts)}`;
+    }
+
+    // ホットペッパー・食べログ（サイト指定検索で最新情報を表示）
+    const siteBase = [loc || "現在地", genreWord, budgetWord, payWord].filter(Boolean).join(" ");
+    document.getElementById("webHpLink").href =
+      `https://www.google.com/search?q=${encodeURIComponent("site:hotpepper.jp " + siteBase)}`;
+    document.getElementById("webTabelogLink").href =
+      `https://www.google.com/search?q=${encodeURIComponent("site:tabelog.com " + siteBase)}`;
+  }
+
   function render() {
+    updateWebSearchLinks();
+
     const targetTime = document.getElementById("timeInput").value;
     const maxBudget = Number(document.getElementById("budgetSelect").value);
     const paymentFilter = document.getElementById("paymentSelect").value;
-    const locationName = document.getElementById("locationInput").value.trim() || "指定場所";
+    const locationName = document.getElementById("locationInput").value.trim();
 
     const filtered = shops
       .filter(s => s.walkMin <= 10)
@@ -717,16 +798,16 @@
       });
 
     document.getElementById("resultCount").textContent =
-      `${locationName}から徒歩10分・${targetTime}営業中：${filtered.length}件`;
+      `マイリスト（${targetTime}営業中）：${filtered.length}件`;
 
     const listEl = document.getElementById("shopList");
     if (filtered.length === 0) {
-      listEl.innerHTML = `<div class="empty">条件に合うお店が見つかりませんでした。</div>`;
+      listEl.innerHTML = `<div class="empty">マイリストに条件に合うお店がありません。<br>上の「本物のお店を検索」ボタンから探して、気に入ったお店を登録してみてください！</div>`;
       return;
     }
 
     listEl.innerHTML = filtered.map(shop => {
-      const q = encodeURIComponent(shop.name + " " + locationName);
+      const q = encodeURIComponent(shop.name + (locationName ? " " + locationName : ""));
       const googleHref = shop.googleUrl || `https://www.google.com/maps/search/?api=1&query=${q}`;
       const hpHref = (shop.sourceUrl && shop.sourceUrl.includes("hotpepper"))
         ? shop.sourceUrl
@@ -738,9 +819,7 @@
       return `
         <article class="shop-card ${shop.memo ? "has-memo" : ""}">
           <div class="card-top">
-            <div class="title-group">
-              <h3 class="shop-name">${escapeHtml(shop.name)}</h3>
-            </div>
+            <h3 class="shop-name">${escapeHtml(shop.name)}</h3>
             <button class="fav-btn ${shop.favorite ? "active" : ""}" onclick="toggleFav('${shop.id}')" aria-label="お気に入り">
               ${shop.favorite ? "★" : "☆"}
             </button>
@@ -791,6 +870,39 @@
     }).join("");
   }
 
+  // 現在地（GPS）取得ボタン
+  const gpsBtn = document.getElementById("gpsBtn");
+  gpsBtn.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      alert("このブラウザは現在地取得に対応していません。場所欄に駅名などを入力してください。");
+      return;
+    }
+    gpsBtn.textContent = "取得中…";
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        gpsCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        document.getElementById("locationInput").value = "";
+        gpsBtn.textContent = "📍 取得済";
+        gpsBtn.classList.add("gps-active");
+        render();
+      },
+      () => {
+        gpsBtn.textContent = "📍 現在地";
+        alert("現在地を取得できませんでした。位置情報の許可を確認するか、場所欄に駅名などを入力してください。");
+      },
+      { enableHighAccuracy: false, timeout: 8000 }
+    );
+  });
+
+  document.getElementById("locationInput").addEventListener("input", () => {
+    if (document.getElementById("locationInput").value.trim()) {
+      gpsCoords = null;
+      gpsBtn.textContent = "📍 現在地";
+      gpsBtn.classList.remove("gps-active");
+    }
+    render();
+  });
+
   window.toggleFav = function(shopId) {
     const shop = shops.find(s => s.id === shopId);
     if (!shop) return;
@@ -814,7 +926,7 @@
     render();
   });
 
-  ["locationInput", "timeInput", "budgetSelect", "paymentSelect"].forEach(id => {
+  ["timeInput", "budgetSelect", "paymentSelect"].forEach(id => {
     document.getElementById(id).addEventListener("input", render);
     document.getElementById(id).addEventListener("change", render);
   });
