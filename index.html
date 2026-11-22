@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>徒歩10分ランチ検索</title>
+  <title>10min LUNCH</title>
   <meta name="theme-color" content="#8c6d53" />
   <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="icon" href="./icon.svg?v=2" type="image/svg+xml" />
   <style>
     :root {
       --bg: #f6f5f2;
@@ -34,7 +34,7 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
-      padding-bottom: 40px;
+      padding-bottom: 48px;
     }
 
     header {
@@ -53,33 +53,33 @@
       align-items: center;
       gap: 12px;
     }
-    h1 { margin: 0; font-size: 1.05rem; font-weight: 700; }
+    h1 { margin: 0; font-size: 1.05rem; font-weight: 700; letter-spacing: 0.02em; }
     .add-btn {
       background: var(--accent);
       color: #fff;
       border: none;
       border-radius: 999px;
       padding: 8px 14px;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
     }
 
-    main { max-width: 720px; margin: 0 auto; padding: 16px; }
+    main { max-width: 720px; margin: 0 auto; padding: 14px 16px; }
 
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 16px;
+      padding: 15px;
       margin-bottom: 14px;
     }
 
-    .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
-    .field { flex: 1; min-width: 140px; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 11px; }
+    .field { flex: 1; min-width: 135px; }
     .field label {
       display: block;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       color: var(--muted);
       margin-bottom: 4px;
       font-weight: 600;
@@ -94,7 +94,7 @@
       padding: 10px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       background: #fff;
       color: var(--text);
       font-family: inherit;
@@ -108,81 +108,94 @@
       color: var(--text);
       border-radius: 8px;
       padding: 0 11px;
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       cursor: pointer;
     }
     .sub-pill-btn.gps-active {
       background: #e8f0fe;
       border-color: #90b8f8;
       color: #1967d2;
-      font-weight: 600;
+      font-weight: 700;
     }
 
-    .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
     .chip {
       border: 1px solid var(--border);
       background: #fff;
       color: var(--text);
       border-radius: 999px;
-      padding: 7px 14px;
-      font-size: 0.85rem;
+      padding: 6px 13px;
+      font-size: 0.84rem;
       cursor: pointer;
     }
     .chip.active { background: var(--text); color: #fff; border-color: var(--text); }
-    .chip.fav-active { background: #fdf3dc; color: #9c6b08; border-color: #e8c468; font-weight: 700; }
 
-    /* 一発検索エリア */
-    .web-search-box {
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px dashed var(--border);
-    }
-    .web-search-title {
-      font-size: 0.8rem;
+    .search-exec-btn {
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.96rem;
       font-weight: 700;
-      color: var(--text);
-      margin: 0 0 8px;
+      cursor: pointer;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-    .web-search-preview {
-      font-size: 0.74rem;
-      font-weight: 400;
-      color: var(--muted);
-    }
-    .web-search-btns {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .web-btn {
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-      padding: 10px 6px;
-      border-radius: 10px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-decoration: none;
-      text-align: center;
-      border: 1px solid transparent;
+      gap: 6px;
     }
-    .web-btn-google { background: #e8f0fe; color: #1967d2; border-color: #c6dafc; }
-    .web-btn-hp { background: #fce8e6; color: #c5221f; border-color: #f6c8c3; }
-    .web-btn-tabelog { background: #fff3e0; color: #c76200; border-color: #fbd9a7; }
-    .web-btn span.sub { font-size: 0.68rem; font-weight: 500; opacity: 0.85; }
+    .search-exec-btn:disabled { opacity: 0.6; cursor: wait; }
+
+    .ext-search-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+    .ext-mini-btn {
+      flex: 1;
+      text-align: center;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 7px 4px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+    .ext-google { background: #e8f0fe; color: #1967d2; }
+    .ext-tabelog { background: #fff3e0; color: #c76200; }
+
+    /* タブ切り替え */
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .tab-btn {
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: var(--text);
+      color: #fff;
+      border-color: var(--text);
+    }
 
     .summary-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 8px 2px 12px;
-      font-size: 0.84rem;
+      margin: 4px 2px 10px;
+      font-size: 0.82rem;
       color: var(--muted);
       gap: 8px;
       flex-wrap: wrap;
@@ -192,7 +205,7 @@
       border: none;
       color: var(--muted);
       text-decoration: underline;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       cursor: pointer;
       padding: 4px 0;
     }
@@ -214,7 +227,7 @@
       gap: 8px;
       margin-bottom: 6px;
     }
-    .shop-name { margin: 0; font-size: 1.08rem; font-weight: 700; }
+    .shop-name { margin: 0; font-size: 1.05rem; font-weight: 700; }
 
     .fav-btn {
       background: none;
@@ -227,13 +240,36 @@
     }
     .fav-btn.active { color: var(--star-active); }
 
+    .save-api-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .save-api-btn.saved {
+      background: #fdf3dc;
+      border-color: #e8c468;
+      color: #9c6b08;
+    }
+
     .meta-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 6px 14px;
-      font-size: 0.84rem;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 0.8rem;
       color: var(--muted);
       margin-bottom: 10px;
+    }
+    .catch-text {
+      font-size: 0.82rem;
+      color: var(--accent-dark);
+      margin-bottom: 8px;
+      font-weight: 600;
     }
 
     .badges {
@@ -249,7 +285,7 @@
       gap: 4px;
       padding: 4px 9px;
       border-radius: 8px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
     }
     .pay-card { background: var(--card-ok-bg); color: var(--card-ok-text); }
@@ -262,16 +298,35 @@
       border: 1px solid var(--border);
       padding: 3px 9px;
       border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
     }
-    .budget-badge { font-weight: 700; font-size: 0.85rem; }
+    .budget-badge { font-weight: 700; font-size: 0.83rem; }
+
+    .photo-wrap { margin-bottom: 10px; }
+    .menu-photo {
+      width: 100%;
+      max-height: 210px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      display: block;
+    }
 
     .menu-box {
       background: #f9f8f6;
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 9px 11px;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+    .memo-box {
+      background: var(--memo-bg);
+      border: 1px solid var(--memo-border);
+      border-radius: 8px;
+      padding: 9px 11px;
+      font-size: 0.84rem;
       margin-bottom: 10px;
       white-space: pre-wrap;
     }
@@ -282,26 +337,6 @@
       margin-bottom: 3px;
       display: block;
     }
-
-    .photo-wrap { margin-bottom: 10px; }
-    .menu-photo {
-      width: 100%;
-      max-height: 220px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      display: block;
-    }
-
-    .memo-box {
-      background: var(--memo-bg);
-      border: 1px solid var(--memo-border);
-      border-radius: 8px;
-      padding: 9px 11px;
-      font-size: 0.86rem;
-      margin-bottom: 10px;
-      white-space: pre-wrap;
-    }
     .memo-box .box-label { color: var(--accent-dark); }
 
     .source-links {
@@ -311,7 +346,7 @@
       margin-bottom: 10px;
     }
     .src-link {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       padding: 5px 10px;
       border-radius: 6px;
       text-decoration: none;
@@ -334,9 +369,8 @@
       color: var(--text);
       border-radius: 8px;
       padding: 7px 12px;
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       cursor: pointer;
-      text-decoration: none;
     }
 
     .empty {
@@ -346,9 +380,18 @@
       background: var(--surface);
       border-radius: 14px;
       border: 1px dashed var(--border);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
     }
 
+    .credit {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 28px;
+    }
+    .credit a { color: var(--muted); }
+
+    /* モーダル */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -405,47 +448,40 @@
 
 <header>
   <div class="header-inner">
-    <h1>徒歩10分ランチ検索</h1>
-    <button class="add-btn" id="openAddModalBtn">＋ お店を登録</button>
+    <h1>10min LUNCH</h1>
+    <button class="add-btn" id="openAddModalBtn">＋ お店を手動登録</button>
   </div>
 </header>
 
 <main>
   <section class="panel">
     <div class="row">
-      <div class="field" style="flex: 1.5;">
-        <label for="locationInput">場所（駅名・地名・住所など）</label>
+      <div class="field" style="flex: 1.6;">
+        <label for="locationInput">エリア・駅名（または現在地）</label>
         <div class="inline-wrap">
-          <input type="text" id="locationInput" placeholder="例：天神駅、百道、博多駅など" />
+          <input type="text" id="locationInput" placeholder="例：天神、博多、百道など" />
           <button type="button" class="sub-pill-btn" id="gpsBtn">📍 現在地</button>
-        </div>
-      </div>
-      <div class="field">
-        <label for="timeInput">食べる時間</label>
-        <div class="inline-wrap">
-          <input type="time" id="timeInput" value="12:00" />
-          <button type="button" class="sub-pill-btn" id="setNowBtn">今</button>
         </div>
       </div>
     </div>
 
     <div class="row">
       <div class="field">
-        <label>ジャンル / お気に入り</label>
+        <label>ジャンル</label>
         <div class="chips" id="genreChips">
           <button class="chip active" data-value="すべて">すべて</button>
           <button class="chip" data-value="和食">和食</button>
           <button class="chip" data-value="洋食">洋食</button>
-          <button class="chip" data-value="お弁当">お弁当</button>
           <button class="chip" data-value="定食">定食</button>
-          <button class="chip" id="favFilterBtn" data-fav="true">★ お気に入りのみ</button>
+          <button class="chip" data-value="お弁当">お弁当</button>
+          <button class="chip" data-value="カフェ">カフェ</button>
         </div>
       </div>
     </div>
 
     <div class="row" style="margin-bottom: 0;">
       <div class="field">
-        <label for="budgetSelect">予算上限</label>
+        <label for="budgetSelect">予算（マイリスト用）</label>
         <select id="budgetSelect">
           <option value="1500" selected>1,500円以内</option>
           <option value="1200">1,200円以内</option>
@@ -464,38 +500,49 @@
       </div>
     </div>
 
-    <!-- 条件付き一発ネット検索 -->
-    <div class="web-search-box">
-      <div class="web-search-title">
-        <span>🔍 この条件で本物のお店を検索</span>
-        <span class="web-search-preview" id="searchQueryPreview"></span>
-      </div>
-      <div class="web-search-btns">
-        <a class="web-btn web-btn-google" id="webGoogleLink" href="#" target="_blank" rel="noopener">
-          <span>🗺️ Googleマップ</span>
-          <span class="sub">周辺を地図で探す</span>
-        </a>
-        <a class="web-btn web-btn-hp" id="webHpLink" href="#" target="_blank" rel="noopener">
-          <span>🍽️ ホットペッパー</span>
-          <span class="sub">ランチ・カード情報</span>
-        </a>
-        <a class="web-btn web-btn-tabelog" id="webTabelogLink" href="#" target="_blank" rel="noopener">
-          <span>⭐ 食べログ</span>
-          <span class="sub">メニュー・写真を見る</span>
-        </a>
-      </div>
+    <button type="button" class="search-exec-btn" id="searchApiBtn">
+      🔍 本物のお店を検索する
+    </button>
+
+    <div class="ext-search-row">
+      <a class="ext-mini-btn ext-google" id="extGoogleLink" href="#" target="_blank" rel="noopener">🗺️ Googleマップで直接探す</a>
+      <a class="ext-mini-btn ext-tabelog" id="extTabelogLink" href="#" target="_blank" rel="noopener">⭐ 食べログで直接探す</a>
     </div>
   </section>
 
-  <div class="summary-bar">
-    <span id="resultCount">マイリスト：0件</span>
-    <div>
-      <button class="reset-link" id="exportBtn" style="margin-right: 10px;">バックアップ保存</button>
-      <button class="reset-link" id="resetDataBtn">初期化</button>
-    </div>
+  <!-- タブ切り替え -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tabSearchBtn">🔍 検索結果 (<span id="searchCountBadge">0</span>)</button>
+    <button class="tab-btn" id="tabMyListBtn">★ マイリスト (<span id="myListCountBadge">0</span>)</button>
   </div>
 
-  <section class="shop-list" id="shopList"></section>
+  <!-- 検索結果エリア -->
+  <div id="searchTabPanel">
+    <div class="summary-bar">
+      <span id="apiStatusText">エリアを入力するか「📍現在地」を押して検索してください</span>
+    </div>
+    <section class="shop-list" id="apiShopList">
+      <div class="empty">上の「🔍 本物のお店を検索する」ボタンを押すと、<br>周辺の実在するランチ店が写真付きで表示されます！</div>
+    </section>
+  </div>
+
+  <!-- マイリストエリア -->
+  <div id="myListTabPanel" style="display: none;">
+    <div class="summary-bar">
+      <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+        <input type="checkbox" id="onlyFavCheckbox" /> ★ お気に入りのみ表示
+      </label>
+      <div>
+        <button class="reset-link" id="exportBtn" style="margin-right: 10px;">バックアップ保存</button>
+        <button class="reset-link" id="resetDataBtn">初期化</button>
+      </div>
+    </div>
+    <section class="shop-list" id="myShopList"></section>
+  </div>
+
+  <div class="credit">
+    Powered by <a href="http://webservice.recruit.co.jp/" target="_blank" rel="noopener">ホットペッパーグルメ Webサービス</a>
+  </div>
 </main>
 
 <!-- 編集モーダル -->
@@ -503,7 +550,6 @@
   <div class="modal">
     <h2 id="editModalTitle">お店情報を編集</h2>
     <input type="hidden" id="editShopId" />
-
     <div class="field" style="margin-bottom: 10px;">
       <label for="editPayment">実際の支払い方法</label>
       <select id="editPayment">
@@ -514,33 +560,27 @@
         <option value="unknown">❓ 未確認</option>
       </select>
     </div>
-
     <div class="field" style="margin-bottom: 10px;">
       <label for="editMenu">メニュー一覧</label>
       <textarea id="editMenu" rows="3" placeholder="例：&#10;・塩サバ定食 980円&#10;・日替わりランチ 880円"></textarea>
     </div>
-
     <div class="field" style="margin-bottom: 10px;">
       <label for="editPhotoInput">メニュー・お店の写真</label>
       <input type="file" id="editPhotoInput" accept="image/*" />
       <div id="editPhotoPreviewWrap"></div>
     </div>
-
     <div class="field" style="margin-bottom: 10px;">
       <label for="editMemo">一言メモ</label>
-      <textarea id="editMemo" rows="3" placeholder="例：12:30頃には日替わり売り切れ、カウンター席あり"></textarea>
+      <textarea id="editMemo" rows="3" placeholder="例：12時台は混む、カウンター席あり"></textarea>
     </div>
-
     <div class="field" style="margin-bottom: 10px;">
-      <label for="editGoogleUrl">Googleマップ URL（空欄なら店名で自動検索）</label>
+      <label for="editGoogleUrl">Googleマップ URL（任意）</label>
       <input type="url" id="editGoogleUrl" placeholder="https://maps.app.goo.gl/..." />
     </div>
-
     <div class="field">
       <label for="editSourceUrl">ホットペッパー / 食べログ URL（任意）</label>
       <input type="url" id="editSourceUrl" placeholder="https://..." />
     </div>
-
     <div class="modal-actions">
       <button type="button" class="btn-sub" id="closeEditModalBtn">キャンセル</button>
       <button type="button" class="btn-primary" id="saveEditBtn">保存する</button>
@@ -548,10 +588,10 @@
   </div>
 </div>
 
-<!-- 新規登録モーダル -->
+<!-- 新規手動登録モーダル -->
 <div class="modal-backdrop" id="addModal">
   <div class="modal">
-    <h2>自分のお店を登録</h2>
+    <h2>自分のお店を手動登録</h2>
     <div class="field" style="margin-bottom: 10px;">
       <label for="newName">お店の名前 *</label>
       <input type="text" id="newName" placeholder="例：〇〇弁当、街の定食屋" />
@@ -564,6 +604,7 @@
           <option value="お弁当">お弁当</option>
           <option value="和食">和食</option>
           <option value="洋食">洋食</option>
+          <option value="カフェ">カフェ</option>
         </select>
       </div>
       <div class="field">
@@ -573,8 +614,8 @@
     </div>
     <div class="row" style="margin-bottom: 10px;">
       <div class="field">
-        <label for="newWalk">徒歩（分）</label>
-        <input type="number" id="newWalk" value="5" min="1" max="10" />
+        <label for="newWalk">アクセス・徒歩メモ</label>
+        <input type="text" id="newWalk" placeholder="例：徒歩5分" value="徒歩5分" />
       </div>
       <div class="field">
         <label for="newPayment">支払い方法</label>
@@ -586,19 +627,9 @@
         </select>
       </div>
     </div>
-    <div class="row" style="margin-bottom: 10px;">
-      <div class="field">
-        <label for="newOpen">ランチ開始</label>
-        <input type="time" id="newOpen" value="11:30" />
-      </div>
-      <div class="field">
-        <label for="newClose">ランチ終了</label>
-        <input type="time" id="newClose" value="14:00" />
-      </div>
-    </div>
     <div class="field" style="margin-bottom: 10px;">
       <label for="newMenu">メニュー一覧</label>
-      <textarea id="newMenu" rows="3" placeholder="例：&#10;・唐揚げ弁当 700円&#10;・日替わり定食 950円"></textarea>
+      <textarea id="newMenu" rows="3" placeholder="例：&#10;・唐揚げ弁当 700円"></textarea>
     </div>
     <div class="field" style="margin-bottom: 10px;">
       <label for="newPhotoInput">メニュー・お店の写真</label>
@@ -607,11 +638,7 @@
     </div>
     <div class="field" style="margin-bottom: 10px;">
       <label for="newMemo">一言メモ</label>
-      <textarea id="newMemo" rows="2" placeholder="例：焼き魚が美味しい、提供が早い"></textarea>
-    </div>
-    <div class="field">
-      <label for="newGoogleUrl">Googleマップ URL（任意）</label>
-      <input type="url" id="newGoogleUrl" placeholder="https://maps.app.goo.gl/..." />
+      <textarea id="newMemo" rows="2" placeholder="例：焼き魚が美味しい"></textarea>
     </div>
     <div class="modal-actions">
       <button type="button" class="btn-sub" id="closeAddModalBtn">キャンセル</button>
@@ -621,6 +648,9 @@
 </div>
 
 <script>
+  // ★https://script.google.com/macros/s/AKfycbzaQAy6otZc7cH0dVPL3ExBb0kI00C_s6eNdo0Eu3XTPZTkU2verF16tEmbUV74z3uH/exec
+  const GAS_URL = "ここにウェブアプリのURLを貼る";
+
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("./sw.js").catch(() => {});
@@ -628,62 +658,36 @@
   }
 
   const STORAGE_KEY = "lunch_pwa_shops_v2";
-  const DEFAULT_SHOPS = [
-    {
-      id: "s1",
-      name: "ごはん処 みのり屋（サンプル）",
-      genre: "定食",
-      budget: 980,
-      walkMin: 4,
-      open: "11:00",
-      close: "14:30",
-      payment: "paypay",
-      favorite: true,
-      menu: "・塩サバ定食 980円\n・チキン南蛮定食 950円\n・日替わり定食 880円",
-      photo: "",
-      memo: "ネット検索でいいお店を見つけたら、右上の「＋ お店を登録」からここにストックできます。",
-      googleUrl: "",
-      sourceUrl: ""
-    },
-    {
-      id: "s2",
-      name: "ビストロ・ソレイユ（サンプル）",
-      genre: "洋食",
-      budget: 1350,
-      walkMin: 6,
-      open: "11:30",
-      close: "15:00",
-      payment: "card_paypay",
-      favorite: false,
-      menu: "・週替わりパスタランチ 1,200円\n・デミグラスハンバーグ 1,350円",
-      photo: "",
-      memo: "",
-      googleUrl: "",
-      sourceUrl: ""
-    }
-  ];
-
-  let shops = loadShops();
+  let myShops = loadMyShops();
+  let apiShops = [];
   let selectedGenre = "すべて";
-  let onlyFavorites = false;
+  let gpsCoords = null;
   let tempEditPhoto = "";
   let tempNewPhoto = "";
-  let gpsCoords = null; // { lat, lng }
 
-  function loadShops() {
+  function loadMyShops() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try { return JSON.parse(saved); } catch (e) {}
     }
-    return structuredClone(DEFAULT_SHOPS);
+    return [];
   }
 
-  function saveShops() {
+  function saveMyShops() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(shops));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(myShops));
     } catch (e) {
       alert("保存容量がいっぱいです。不要な写真を削除するかバックアップ保存してください。");
     }
+    document.getElementById("myListCountBadge").textContent = myShops.length;
+  }
+
+  function escapeHtml(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   }
 
   function compressImage(file, callback) {
@@ -705,25 +709,6 @@
     reader.readAsDataURL(file);
   }
 
-  function toMinutes(timeStr) {
-    const [h, m] = timeStr.split(":").map(Number);
-    return h * 60 + m;
-  }
-
-  function isOpenAt(shop, targetTime) {
-    if (!targetTime) return true;
-    const t = toMinutes(targetTime);
-    return t >= toMinutes(shop.open) && t <= toMinutes(shop.close);
-  }
-
-  function matchPayment(shopPayment, filter) {
-    if (filter === "all") return true;
-    if (filter === "card") return shopPayment === "card" || shopPayment === "card_paypay";
-    if (filter === "paypay") return shopPayment === "paypay" || shopPayment === "card_paypay";
-    if (filter === "cash") return shopPayment === "cash";
-    return true;
-  }
-
   function renderPaymentBadges(payment) {
     if (payment === "card_paypay") {
       return `<span class="pay-badge pay-card">💳 カード可</span><span class="pay-badge pay-paypay">📱 PayPay可</span>`;
@@ -734,81 +719,175 @@
     return `<span class="pay-badge pay-unknown">❓ 支払い未確認</span>`;
   }
 
-  function escapeHtml(str) {
-    return String(str || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
+  // 外部直接検索リンクの更新
+  function updateExtLinks() {
+    const loc = document.getElementById("locationInput").value.trim();
+    const genreWord = selectedGenre === "すべて" ? "ランチ" : `${selectedGenre} ランチ`;
+    const base = [loc || "現在地", genreWord].join(" ");
+    if (gpsCoords && !loc) {
+      document.getElementById("extGoogleLink").href =
+        `https://www.google.com/maps/search/${encodeURIComponent(genreWord)}/@${gpsCoords.lat},${gpsCoords.lng},15z`;
+    } else {
+      document.getElementById("extGoogleLink").href =
+        `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(base)}`;
+    }
+    document.getElementById("extTabelogLink").href =
+      `https://www.google.com/search?q=${encodeURIComponent("site:tabelog.com " + base)}`;
   }
 
-  // 一発ネット検索ボタンのURLを最新条件に更新
-  function updateWebSearchLinks() {
-    const loc = document.getElementById("locationInput").value.trim();
-    const budget = Number(document.getElementById("budgetSelect").value);
-    const pay = document.getElementById("paymentSelect").value;
-
-    const genreWord = selectedGenre === "すべて" ? "ランチ" : `${selectedGenre} ランチ`;
-    const budgetWord = budget < 9999 ? `${budget}円以内` : "";
-    const payWord = pay === "card" ? "カード可" : pay === "paypay" ? "PayPay" : "";
-
-    const parts = [loc || (gpsCoords ? "" : "現在地"), genreWord, budgetWord, payWord].filter(Boolean);
-    const queryText = parts.join(" ");
-
-    document.getElementById("searchQueryPreview").textContent =
-      gpsCoords && !loc ? `現在地周辺 / ${[genreWord, budgetWord, payWord].filter(Boolean).join(" ")}` : queryText;
-
-    // Googleマップ（GPS取得済みかつ場所欄が空なら、現在地中心・徒歩10分圏のズーム15zで開く）
-    if (gpsCoords && !loc) {
-      const mapQ = encodeURIComponent([genreWord, budgetWord, payWord].filter(Boolean).join(" "));
-      document.getElementById("webGoogleLink").href =
-        `https://www.google.com/maps/search/${mapQ}/@${gpsCoords.lat},${gpsCoords.lng},15z`;
-    } else {
-      const mapParts = [loc || "現在地", genreWord, budgetWord, payWord].filter(Boolean).join(" ");
-      document.getElementById("webGoogleLink").href =
-        `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapParts)}`;
+  // ホットペッパーAPI検索（GAS経由）
+  async function searchHotPepper() {
+    if (!GAS_URL || GAS_URL.includes("ここにウェブアプリのURL")) {
+      alert("コード内の GAS_URL に、Google Apps ScriptのウェブアプリURLを貼り付けてください！");
+      return;
     }
 
-    // ホットペッパー・食べログ（サイト指定検索で最新情報を表示）
-    const siteBase = [loc || "現在地", genreWord, budgetWord, payWord].filter(Boolean).join(" ");
-    document.getElementById("webHpLink").href =
-      `https://www.google.com/search?q=${encodeURIComponent("site:hotpepper.jp " + siteBase)}`;
-    document.getElementById("webTabelogLink").href =
-      `https://www.google.com/search?q=${encodeURIComponent("site:tabelog.com " + siteBase)}`;
+    const loc = document.getElementById("locationInput").value.trim();
+    const pay = document.getElementById("paymentSelect").value;
+    if (!loc && !gpsCoords) {
+      alert("エリア名（例：天神、博多など）を入力するか、「📍 現在地」ボタンを押してください。");
+      return;
+    }
+
+    const btn = document.getElementById("searchApiBtn");
+    btn.disabled = true;
+    btn.textContent = "🔍 検索中…";
+    document.getElementById("apiStatusText").textContent = "本物のお店データを取得しています…";
+
+    const params = new URLSearchParams();
+    params.set("lunch", "1");
+    if (gpsCoords && !loc) {
+      params.set("lat", gpsCoords.lat);
+      params.set("lng", gpsCoords.lng);
+    }
+    const kwParts = [];
+    if (loc) kwParts.push(loc);
+    if (selectedGenre !== "すべて") kwParts.push(selectedGenre);
+    if (kwParts.length > 0) params.set("keyword", kwParts.join(" "));
+    if (pay === "card") params.set("card", "1");
+
+    try {
+      const res = await fetch(`${GAS_URL}?${params.toString()}`);
+      const data = await res.json();
+      apiShops = (data.results && data.results.shop) ? data.results.shop : [];
+      document.getElementById("searchCountBadge").textContent = apiShops.length;
+      document.getElementById("apiStatusText").textContent =
+        `${apiShops.length}件のお店が見つかりました`;
+      switchTab("search");
+      renderApiShops();
+    } catch (err) {
+      document.getElementById("apiStatusText").textContent = "検索に失敗しました。";
+      alert("お店データの取得に失敗しました。GASのURLや「全員がアクセス可能」設定を確認してください。");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "🔍 本物のお店を検索する";
+    }
   }
 
-  function render() {
-    updateWebSearchLinks();
+  function renderApiShops() {
+    const listEl = document.getElementById("apiShopList");
+    if (apiShops.length === 0) {
+      listEl.innerHTML = `<div class="empty">条件に合うお店が見つかりませんでした。<br>ジャンルを「すべて」にするか、エリア名を変えてお試しください。</div>`;
+      return;
+    }
 
-    const targetTime = document.getElementById("timeInput").value;
+    listEl.innerHTML = apiShops.map((shop, idx) => {
+      const isSaved = myShops.some(m => m.id === "hp_" + shop.id);
+      const photoUrl = (shop.photo && shop.photo.pc && shop.photo.pc.l) || "";
+      const cardOk = shop.card === "利用可";
+      const budgetStr = (shop.budget && (shop.budget.average || shop.budget.name)) || "予算情報なし";
+      const genreStr = (shop.genre && shop.genre.name) || "グルメ";
+      const hpUrl = (shop.urls && shop.urls.pc) || "#";
+      const googleHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name + " " + (shop.address || ""))}`;
+      const tabelogHref = `https://www.google.com/search?q=${encodeURIComponent(shop.name + " 食べログ")}`;
+
+      return `
+        <article class="shop-card">
+          <div class="card-top">
+            <h3 class="shop-name">${escapeHtml(shop.name)}</h3>
+            <button class="save-api-btn ${isSaved ? "saved" : ""}" onclick="saveFromApi(${idx})">
+              ${isSaved ? "★ 保存済" : "☆ マイリストに保存"}
+            </button>
+          </div>
+          ${shop.catch ? `<div class="catch-text">${escapeHtml(shop.catch)}</div>` : ""}
+          <div class="meta-row">
+            <span>🚶 ${escapeHtml(shop.mobile_access || shop.access || "")}</span>
+            <span>🕒 ${escapeHtml(shop.open || "")}</span>
+          </div>
+          <div class="badges">
+            <span class="pay-badge ${cardOk ? "pay-card" : "pay-unknown"}">${cardOk ? "💳 カード可" : "❓ カード要確認"}</span>
+            <span class="genre-badge">${escapeHtml(genreStr)}</span>
+            <span class="budget-badge">${escapeHtml(budgetStr)}</span>
+          </div>
+          ${photoUrl ? `<div class="photo-wrap"><img class="menu-photo" src="${photoUrl}" alt="${escapeHtml(shop.name)}" loading="lazy" /></div>` : ""}
+          <div class="source-links">
+            <a class="src-link src-hotpepper" href="${hpUrl}" target="_blank" rel="noopener">🍽️ ホットペッパー</a>
+            <a class="src-link src-google" href="${googleHref}" target="_blank" rel="noopener">🗺️ Googleマップ</a>
+            <a class="src-link src-tabelog" href="${tabelogHref}" target="_blank" rel="noopener">⭐ 食べログ</a>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  // 検索結果からマイリストへ保存
+  window.saveFromApi = function(idx) {
+    const shop = apiShops[idx];
+    if (!shop) return;
+    const id = "hp_" + shop.id;
+    const exists = myShops.findIndex(m => m.id === id);
+    if (exists >= 0) {
+      if (confirm("マイリストから削除しますか？")) {
+        myShops.splice(exists, 1);
+        saveMyShops();
+        renderApiShops();
+        renderMyShops();
+      }
+      return;
+    }
+    myShops.unshift({
+      id,
+      name: shop.name,
+      genre: (shop.genre && shop.genre.name) || "ランチ",
+      budget: 1200,
+      walkText: shop.mobile_access || shop.access || "",
+      openText: shop.open || "",
+      payment: shop.card === "利用可" ? "card" : "unknown",
+      favorite: true,
+      menu: "",
+      photo: (shop.photo && shop.photo.pc && shop.photo.pc.l) || "",
+      memo: shop.catch || "",
+      googleUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name + " " + (shop.address || ""))}`,
+      sourceUrl: (shop.urls && shop.urls.pc) || ""
+    });
+    saveMyShops();
+    renderApiShops();
+    renderMyShops();
+  };
+
+  function renderMyShops() {
+    document.getElementById("myListCountBadge").textContent = myShops.length;
     const maxBudget = Number(document.getElementById("budgetSelect").value);
-    const paymentFilter = document.getElementById("paymentSelect").value;
-    const locationName = document.getElementById("locationInput").value.trim();
+    const payFilter = document.getElementById("paymentSelect").value;
+    const onlyFav = document.getElementById("onlyFavCheckbox").checked;
 
-    const filtered = shops
-      .filter(s => s.walkMin <= 10)
-      .filter(s => selectedGenre === "すべて" || s.genre === selectedGenre)
-      .filter(s => !onlyFavorites || s.favorite)
-      .filter(s => s.budget <= maxBudget)
-      .filter(s => matchPayment(s.payment, paymentFilter))
-      .filter(s => isOpenAt(s, targetTime))
-      .sort((a, b) => {
-        if ((b.favorite ? 1 : 0) !== (a.favorite ? 1 : 0)) return (b.favorite ? 1 : 0) - (a.favorite ? 1 : 0);
-        return a.walkMin - b.walkMin;
-      });
+    const filtered = myShops.filter(s => {
+      if (onlyFav && !s.favorite) return false;
+      if (s.budget && s.budget > maxBudget) return false;
+      if (payFilter === "card" && !(s.payment === "card" || s.payment === "card_paypay")) return false;
+      if (payFilter === "paypay" && !(s.payment === "paypay" || s.payment === "card_paypay")) return false;
+      if (payFilter === "cash" && s.payment !== "cash") return false;
+      return true;
+    });
 
-    document.getElementById("resultCount").textContent =
-      `マイリスト（${targetTime}営業中）：${filtered.length}件`;
-
-    const listEl = document.getElementById("shopList");
+    const listEl = document.getElementById("myShopList");
     if (filtered.length === 0) {
-      listEl.innerHTML = `<div class="empty">マイリストに条件に合うお店がありません。<br>上の「本物のお店を検索」ボタンから探して、気に入ったお店を登録してみてください！</div>`;
+      listEl.innerHTML = `<div class="empty">マイリストに該当するお店がありません。<br>検索結果から「☆ マイリストに保存」するか、右上の「＋ お店を手動登録」で追加できます。</div>`;
       return;
     }
 
     listEl.innerHTML = filtered.map(shop => {
-      const q = encodeURIComponent(shop.name + (locationName ? " " + locationName : ""));
-      const googleHref = shop.googleUrl || `https://www.google.com/maps/search/?api=1&query=${q}`;
+      const googleHref = shop.googleUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name)}`;
       const hpHref = (shop.sourceUrl && shop.sourceUrl.includes("hotpepper"))
         ? shop.sourceUrl
         : `https://www.google.com/search?q=${encodeURIComponent(shop.name + " ホットペッパー")}`;
@@ -820,48 +899,27 @@
         <article class="shop-card ${shop.memo ? "has-memo" : ""}">
           <div class="card-top">
             <h3 class="shop-name">${escapeHtml(shop.name)}</h3>
-            <button class="fav-btn ${shop.favorite ? "active" : ""}" onclick="toggleFav('${shop.id}')" aria-label="お気に入り">
+            <button class="fav-btn ${shop.favorite ? "active" : ""}" onclick="toggleFav('${shop.id}')">
               ${shop.favorite ? "★" : "☆"}
             </button>
           </div>
-
           <div class="meta-row">
-            <span>🚶 徒歩${shop.walkMin}分</span>
-            <span>🕒 ${shop.open}〜${shop.close}</span>
+            ${shop.walkText ? `<span>🚶 ${escapeHtml(shop.walkText)}</span>` : (shop.walkMin ? `<span>🚶 徒歩${shop.walkMin}分</span>` : "")}
+            ${shop.openText ? `<span>🕒 ${escapeHtml(shop.openText)}</span>` : ""}
           </div>
-
           <div class="badges">
             ${renderPaymentBadges(shop.payment)}
             <span class="genre-badge">${escapeHtml(shop.genre)}</span>
-            <span class="budget-badge">〜${shop.budget.toLocaleString()}円</span>
+            ${shop.budget ? `<span class="budget-badge">〜${Number(shop.budget).toLocaleString()}円</span>` : ""}
           </div>
-
-          ${shop.photo ? `
-            <div class="photo-wrap">
-              <img class="menu-photo" src="${shop.photo}" alt="${escapeHtml(shop.name)}の写真" />
-            </div>
-          ` : ""}
-
-          ${shop.menu ? `
-            <div class="menu-box">
-              <span class="box-label">📋 メニュー</span>
-              ${escapeHtml(shop.menu)}
-            </div>
-          ` : ""}
-
-          ${shop.memo ? `
-            <div class="memo-box">
-              <span class="box-label">📝 マイメモ</span>
-              ${escapeHtml(shop.memo)}
-            </div>
-          ` : ""}
-
+          ${shop.photo ? `<div class="photo-wrap"><img class="menu-photo" src="${shop.photo}" alt="${escapeHtml(shop.name)}" /></div>` : ""}
+          ${shop.menu ? `<div class="menu-box"><span class="box-label">📋 メニュー</span>${escapeHtml(shop.menu)}</div>` : ""}
+          ${shop.memo ? `<div class="memo-box"><span class="box-label">📝 マイメモ</span>${escapeHtml(shop.memo)}</div>` : ""}
           <div class="source-links">
             <a class="src-link src-google" href="${googleHref}" target="_blank" rel="noopener">🗺️ Googleマップ</a>
             <a class="src-link src-hotpepper" href="${hpHref}" target="_blank" rel="noopener">🍽️ ホットペッパー</a>
             <a class="src-link src-tabelog" href="${tabelogHref}" target="_blank" rel="noopener">⭐ 食べログ</a>
           </div>
-
           <div class="card-actions">
             <button class="btn-sub" onclick="openEditModal('${shop.id}')">✏️ メニュー・写真・メモを編集</button>
           </div>
@@ -870,13 +928,22 @@
     }).join("");
   }
 
-  // 現在地（GPS）取得ボタン
+  function switchTab(tab) {
+    const isSearch = tab === "search";
+    document.getElementById("tabSearchBtn").classList.toggle("active", isSearch);
+    document.getElementById("tabMyListBtn").classList.toggle("active", !isSearch);
+    document.getElementById("searchTabPanel").style.display = isSearch ? "block" : "none";
+    document.getElementById("myListTabPanel").style.display = isSearch ? "none" : "block";
+  }
+
+  document.getElementById("tabSearchBtn").addEventListener("click", () => switchTab("search"));
+  document.getElementById("tabMyListBtn").addEventListener("click", () => switchTab("mylist"));
+  document.getElementById("searchApiBtn").addEventListener("click", searchHotPepper);
+
+  // GPSボタン
   const gpsBtn = document.getElementById("gpsBtn");
   gpsBtn.addEventListener("click", () => {
-    if (!navigator.geolocation) {
-      alert("このブラウザは現在地取得に対応していません。場所欄に駅名などを入力してください。");
-      return;
-    }
+    if (!navigator.geolocation) return alert("位置情報に対応していません。");
     gpsBtn.textContent = "取得中…";
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -884,11 +951,11 @@
         document.getElementById("locationInput").value = "";
         gpsBtn.textContent = "📍 取得済";
         gpsBtn.classList.add("gps-active");
-        render();
+        updateExtLinks();
       },
       () => {
         gpsBtn.textContent = "📍 現在地";
-        alert("現在地を取得できませんでした。位置情報の許可を確認するか、場所欄に駅名などを入力してください。");
+        alert("現在地を取得できませんでした。位置情報の許可を確認してください。");
       },
       { enableHighAccuracy: false, timeout: 8000 }
     );
@@ -900,54 +967,36 @@
       gpsBtn.textContent = "📍 現在地";
       gpsBtn.classList.remove("gps-active");
     }
-    render();
+    updateExtLinks();
   });
-
-  window.toggleFav = function(shopId) {
-    const shop = shops.find(s => s.id === shopId);
-    if (!shop) return;
-    shop.favorite = !shop.favorite;
-    saveShops();
-    render();
-  };
 
   document.getElementById("genreChips").addEventListener("click", (e) => {
     const btn = e.target.closest(".chip");
     if (!btn) return;
-    if (btn.dataset.fav) {
-      onlyFavorites = !onlyFavorites;
-      btn.classList.toggle("fav-active", onlyFavorites);
-      render();
-      return;
-    }
-    document.querySelectorAll("#genreChips .chip:not([data-fav])").forEach(c => c.classList.remove("active"));
+    document.querySelectorAll("#genreChips .chip").forEach(c => c.classList.remove("active"));
     btn.classList.add("active");
     selectedGenre = btn.dataset.value;
-    render();
+    updateExtLinks();
   });
 
-  ["timeInput", "budgetSelect", "paymentSelect"].forEach(id => {
-    document.getElementById(id).addEventListener("input", render);
-    document.getElementById(id).addEventListener("change", render);
+  ["budgetSelect", "paymentSelect", "onlyFavCheckbox"].forEach(id => {
+    document.getElementById(id).addEventListener("change", renderMyShops);
   });
 
-  document.getElementById("setNowBtn").addEventListener("click", () => {
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, "0");
-    const mm = String(now.getMinutes()).padStart(2, "0");
-    document.getElementById("timeInput").value = `${hh}:${mm}`;
-    render();
-  });
+  window.toggleFav = function(shopId) {
+    const shop = myShops.find(s => s.id === shopId);
+    if (!shop) return;
+    shop.favorite = !shop.favorite;
+    saveMyShops();
+    renderMyShops();
+  };
 
   // 編集モーダル
   const editModal = document.getElementById("editModal");
   function renderEditPhotoPreview() {
     const wrap = document.getElementById("editPhotoPreviewWrap");
     if (!tempEditPhoto) { wrap.innerHTML = ""; return; }
-    wrap.innerHTML = `
-      <img class="preview-img" src="${tempEditPhoto}" alt="プレビュー" />
-      <button type="button" class="photo-remove-btn" id="removeEditPhotoBtn">この写真を削除</button>
-    `;
+    wrap.innerHTML = `<img class="preview-img" src="${tempEditPhoto}" /><button type="button" class="photo-remove-btn" id="removeEditPhotoBtn">この写真を削除</button>`;
     document.getElementById("removeEditPhotoBtn").addEventListener("click", () => {
       tempEditPhoto = "";
       document.getElementById("editPhotoInput").value = "";
@@ -956,11 +1005,11 @@
   }
 
   window.openEditModal = function(shopId) {
-    const shop = shops.find(s => s.id === shopId);
+    const shop = myShops.find(s => s.id === shopId);
     if (!shop) return;
     document.getElementById("editShopId").value = shop.id;
     document.getElementById("editModalTitle").textContent = `${shop.name} の編集`;
-    document.getElementById("editPayment").value = shop.payment;
+    document.getElementById("editPayment").value = shop.payment || "unknown";
     document.getElementById("editMenu").value = shop.menu || "";
     document.getElementById("editMemo").value = shop.memo || "";
     document.getElementById("editGoogleUrl").value = shop.googleUrl || "";
@@ -974,15 +1023,12 @@
   document.getElementById("editPhotoInput").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    compressImage(file, (dataUrl) => {
-      tempEditPhoto = dataUrl;
-      renderEditPhotoPreview();
-    });
+    compressImage(file, (dataUrl) => { tempEditPhoto = dataUrl; renderEditPhotoPreview(); });
   });
 
   document.getElementById("closeEditModalBtn").addEventListener("click", () => editModal.classList.remove("open"));
   document.getElementById("saveEditBtn").addEventListener("click", () => {
-    const shop = shops.find(s => s.id === document.getElementById("editShopId").value);
+    const shop = myShops.find(s => s.id === document.getElementById("editShopId").value);
     if (shop) {
       shop.payment = document.getElementById("editPayment").value;
       shop.menu = document.getElementById("editMenu").value.trim();
@@ -990,21 +1036,18 @@
       shop.photo = tempEditPhoto;
       shop.googleUrl = document.getElementById("editGoogleUrl").value.trim();
       shop.sourceUrl = document.getElementById("editSourceUrl").value.trim();
-      saveShops();
-      render();
+      saveMyShops();
+      renderMyShops();
     }
     editModal.classList.remove("open");
   });
 
-  // 新規登録モーダル
+  // 手動登録モーダル
   const addModal = document.getElementById("addModal");
   function renderNewPhotoPreview() {
     const wrap = document.getElementById("newPhotoPreviewWrap");
     if (!tempNewPhoto) { wrap.innerHTML = ""; return; }
-    wrap.innerHTML = `
-      <img class="preview-img" src="${tempNewPhoto}" alt="プレビュー" />
-      <button type="button" class="photo-remove-btn" id="removeNewPhotoBtn">この写真を削除</button>
-    `;
+    wrap.innerHTML = `<img class="preview-img" src="${tempNewPhoto}" /><button type="button" class="photo-remove-btn" id="removeNewPhotoBtn">この写真を削除</button>`;
     document.getElementById("removeNewPhotoBtn").addEventListener("click", () => {
       tempNewPhoto = "";
       document.getElementById("newPhotoInput").value = "";
@@ -1015,10 +1058,7 @@
   document.getElementById("newPhotoInput").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    compressImage(file, (dataUrl) => {
-      tempNewPhoto = dataUrl;
-      renderNewPhotoPreview();
-    });
+    compressImage(file, (dataUrl) => { tempNewPhoto = dataUrl; renderNewPhotoPreview(); });
   });
 
   document.getElementById("openAddModalBtn").addEventListener("click", () => {
@@ -1028,37 +1068,35 @@
     addModal.classList.add("open");
   });
   document.getElementById("closeAddModalBtn").addEventListener("click", () => addModal.classList.remove("open"));
-
   document.getElementById("saveAddBtn").addEventListener("click", () => {
     const name = document.getElementById("newName").value.trim();
     if (!name) return alert("お店の名前を入力してください。");
-    shops.unshift({
+    myShops.unshift({
       id: "custom_" + Date.now(),
       name,
       genre: document.getElementById("newGenre").value,
       budget: Number(document.getElementById("newBudget").value) || 1000,
-      walkMin: Number(document.getElementById("newWalk").value) || 5,
-      open: document.getElementById("newOpen").value || "11:30",
-      close: document.getElementById("newClose").value || "14:00",
+      walkText: document.getElementById("newWalk").value.trim(),
+      openText: "",
       payment: document.getElementById("newPayment").value,
-      favorite: false,
+      favorite: true,
       menu: document.getElementById("newMenu").value.trim(),
       photo: tempNewPhoto,
       memo: document.getElementById("newMemo").value.trim(),
-      googleUrl: document.getElementById("newGoogleUrl").value.trim(),
+      googleUrl: "",
       sourceUrl: ""
     });
-    saveShops();
-    render();
+    saveMyShops();
+    renderMyShops();
+    switchTab("mylist");
     document.getElementById("newName").value = "";
     document.getElementById("newMenu").value = "";
     document.getElementById("newMemo").value = "";
-    document.getElementById("newGoogleUrl").value = "";
     addModal.classList.remove("open");
   });
 
   document.getElementById("exportBtn").addEventListener("click", () => {
-    const blob = new Blob([JSON.stringify(shops, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(myShops, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "lunch_memo_backup.json";
@@ -1066,14 +1104,16 @@
   });
 
   document.getElementById("resetDataBtn").addEventListener("click", () => {
-    if (confirm("編集したメモや追加したお店を初期状態に戻しますか？")) {
+    if (confirm("マイリストのデータをすべて消去しますか？")) {
       localStorage.removeItem(STORAGE_KEY);
-      shops = structuredClone(DEFAULT_SHOPS);
-      render();
+      myShops = [];
+      renderMyShops();
+      renderApiShops();
     }
   });
 
-  render();
+  updateExtLinks();
+  renderMyShops();
 </script>
 </body>
 </html>
