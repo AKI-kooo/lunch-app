@@ -501,7 +501,7 @@
     </div>
 
     <button type="button" class="search-exec-btn" id="searchApiBtn">
-      🔍 本物のお店を検索する
+      🔍 お店を検索する
     </button>
 
     <div class="ext-search-row">
@@ -522,7 +522,7 @@
       <span id="apiStatusText">エリアを入力するか「📍現在地」を押して検索してください</span>
     </div>
     <section class="shop-list" id="apiShopList">
-      <div class="empty">上の「🔍 本物のお店を検索する」ボタンを押すと、<br>周辺の実在するランチ店が写真付きで表示されます！</div>
+      <div class="empty">上の「🔍 お店を検索する」ボタンを押すと、<br>周辺の実在するランチ店が写真付きで表示されます！</div>
     </section>
   </div>
 
@@ -752,7 +752,7 @@
     const btn = document.getElementById("searchApiBtn");
     btn.disabled = true;
     btn.textContent = "🔍 検索中…";
-    document.getElementById("apiStatusText").textContent = "本物のお店データを取得しています…";
+    document.getElementById("apiStatusText").textContent = "お店データを取得しています…";
 
     const params = new URLSearchParams();
     params.set("lunch", "1");
@@ -780,7 +780,7 @@
       alert("お店データの取得に失敗しました。GASのURLや「全員がアクセス可能」設定を確認してください。");
     } finally {
       btn.disabled = false;
-      btn.textContent = "🔍 本物のお店を検索する";
+      btn.textContent = "🔍 お店を検索する";
     }
   }
 
